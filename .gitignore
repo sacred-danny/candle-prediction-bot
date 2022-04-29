@@ -1,0 +1,8 @@
+/logs/
+/config.json
+/.idea
+/build/
+/venv/
+/dist/
+/*.spec
+/logs*
