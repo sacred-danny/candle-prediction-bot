@@ -76,6 +76,7 @@ class PredictionBot:
         self.current_up_amount = 0
         self.current_down_amount = 0
         self.current_round_end = 0
+        self.max_bet_amount = 5
 
         self.bnb_price = 0
 
@@ -111,6 +112,7 @@ class PredictionBot:
                 self.default_bet_amount = data['bet_amount']
                 self.wallet_balance_limit_down = data['limit_down']
                 self.wallet_balance_limit_up = data['limit_up']
+                self.max_bet_amount = data['max_bet_amount']
                 self.bet_increase = data['bet_increase']
                 print('Read Config Success')
         except Exception as e:
