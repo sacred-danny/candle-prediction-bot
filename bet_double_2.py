@@ -76,7 +76,7 @@ class PredictionBot:
         self.current_up_amount = 0
         self.current_down_amount = 0
         self.current_round_end = 0
-        self.max_bet_amount = 2.5
+        self.max_bet_amount = 6
 
         self.bnb_price = 0
 
