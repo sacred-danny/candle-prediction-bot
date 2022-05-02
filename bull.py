@@ -224,7 +224,7 @@ class PredictionBot:
 
     def get_bnb_price(self):
         try:
-            res = requests.get('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT')
+            res = requests.get('https://api.binance.com/api/v3/ticker/price?symbol=BNBBUSD')
             res_json = res.json()
             self.bnb_price = round(float(res_json['price']), 3)
         except Exception as e:
