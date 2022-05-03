@@ -152,8 +152,6 @@ class PredictionBotRate(PredictionBot):
                     else:
                         bet_amount *= self.bet_increase
 
-            up_rate = (self.current_prize + bet_amount) / (self.current_up_amount + bet_amount)
-            down_rate = (self.current_prize + bet_amount) / (self.current_down_amount + bet_amount)
             self.bet_amount = bet_amount
             if self.bet_amount > self.max_bet_amount:
               self.bet_amount = self.default_bet_amount

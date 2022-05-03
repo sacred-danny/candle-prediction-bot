@@ -46,7 +46,7 @@ logging.config.dictConfig({
 LOGGER = logging.getLogger()
 
 
-class PredictionBotUp(PredictionBot):
+class PredictionBotRate(PredictionBot):
     def __init__(self):
         super().__init__()
         self.diff = 0.5
@@ -100,87 +100,106 @@ class PredictionBotUp(PredictionBot):
         threading.Thread(target=self.display).start()
         threading.Thread(target=self.get_bnb_price_loop).start()
 
-        win = True
-        round_count = 0
+        self.current_price = self.get_price()
+        bet_count = 0
+        claim_count = 0
+        bet_ids = []
+
+        bet_odd = 0
+        bet_even = 0
+        bet_odd_amount = self.default_bet_amount
+        bet_even_amount = self.default_bet_amount
+        bet_amount = self.default_bet_amount
+
+        bet_odd_win = True
+        bet_even_win = True
+
         while True:
             self.current_id = self.wallet.get_current_Epoch()
             previous_round = self.wallet.get_round(self.current_id - 1)
             self.locked_price = previous_round[4] / 10 ** 8
             self.current_round_end = previous_round[3]
-            round_count += 1
-            time.sleep(5)
-            price = self.current_price
-            while self.remain_time > self.pending_time:
-                if price != self.current_price:
-                    price = self.current_price
-                    print('\n', end=' ')
-                price_diff = round(self.current_price - self.locked_price, 3)
-                bet_amount = self.bet_amount if self.up_or_down != "" else ""
-                print(f'\rID: {self.current_id - 1} | remain: {self.remain_time}, '
-                      f'Locked: {self.locked_price} | '
-                      f'Current: {self.current_price} | {price_diff}| '
-                      f'Bet: {self.up_or_down} {bet_amount}', end=' ')
-                time.sleep(1)
 
-            if round_count % 2 == 1:
-                # self.start_mempool = True
+            time.sleep(10)
 
-                while self.remain_time >= self.bet_time:
-                    time.sleep(0.01)
+            if self.remain_time < self.bet_time:
+                continue
+            else:
+                while self.remain_time > self.bet_time:
+                    time.sleep(0.1)
 
-                if win:
-                    self.bet_amount = self.default_bet_amount
-                else:
-                    if self.bet_id != 0:
-                        self.bet_amount *= self.bet_increase
-
-                current_round = self.wallet.get_round(self.current_id)
-                self.current_prize = current_round[8]
-                self.current_up_amount = current_round[9] + self.current_up_amount_p
-                self.current_down_amount = current_round[10] + self.current_down_amount_p
-
-                if self.bet_amount > self.max_bet_amount:
-                  self.bet_amount = self.default_bet_amount
-                bet_res = self.bet_bull()
-                if bet_res:
-                    self.up_or_down = 'UP'
-                    self.bet_id = self.current_id
-                else:
-                    self.up_or_down = ""
-                    self.bet_id = 0
-
-                time.sleep(10)
-                previous_round = self.wallet.get_round(self.current_id)
-                try:
-                    previous_up_rate = round(previous_round[8] / previous_round[9], 2)
-                    previous_down_rate = round(previous_round[8] / previous_round[10], 2)
-                    if self.bet_id != 0:
-                        print(f"ID: {self.current_id}, Up: {previous_up_rate}, Down: {previous_down_rate}, Bet: {self.up_or_down}")
-                        print(f"Tx: {bet_res}")
+            current_round = self.wallet.get_round(self.current_id)
+            self.current_prize = current_round[8]
+            self.current_up_amount = current_round[9]
+            self.current_down_amount = current_round[10]
+            bet_count += 1
+            if bet_count % 2 == 1:
+                bet_to = 1
+            else:
+                bet_to = 2
+            if bet_to == 1:
+                if bet_odd != 0:
+                    bet_amount = bet_odd_amount
+                    if bet_odd_win:
+                        bet_amount = self.default_bet_amount
                     else:
-                        print(f"ID: {self.current_id}, Up: {previous_up_rate}, Down: {previous_down_rate}, Bet: FAIL")
-                except Exception as e:
-                    pass
+                        bet_amount *= self.bet_increase
+            else:
+                if bet_even != 0:
+                    bet_amount = bet_even_amount
+                    if bet_even_win:
+                        bet_amount = self.default_bet_amount
+                    else:
+                        bet_amount *= self.bet_increase
 
-            print('\nwait 15 secs...')
-            time.sleep(30)
-
-            wallet_balance = self.get_balance()
-            if self.bet_id != 0 and round_count % 2 == 0:
-                if self.wallet.claimAble(self.bet_id):
-                    claim_tx = self.claim(self.bet_id)
-                    wallet_balance_1 = self.get_balance()
-                    claim_amount = wallet_balance_1 - wallet_balance
-                    LOGGER.info(f"Win ID: {self.current_id - 1}, Bet: {self.bet_amount}, Profit: {claim_amount - self.bet_amount}")
-                    print(f"tx: {claim_tx}")
-                    win = True
+            self.bet_amount = bet_amount
+            if self.bet_amount > self.max_bet_amount:
+              self.bet_amount = self.default_bet_amount
+            if  bet_to == 2:
+                print("BULL BETTING!")
+                bet_res = self.bet_bull()
+            else:
+                print("BEAR BETTING!")
+                bet_res = self.bet_bear()
+            if bet_res:
+                print(f"Bet ID: {self.current_id} Amount: {bet_amount}")
+                if bet_to == 1:
+                    bet_odd = self.current_id
+                    bet_odd_amount = bet_amount
                 else:
-                    LOGGER.info(f"Lose ID: {self.current_id - 1}, Bet: {self.bet_amount}")
-                    win = False
-                self.up_or_down = ""
+                    bet_even = self.current_id
+                    bet_even_amount = bet_amount
+            else:
+                print(f"Bet Failed ID: {self.current_id} Amount: {bet_amount}")
+                if bet_to == 1:
+                    bet_odd = 0
+                else:
+                    bet_even = 0
+
+            time.sleep(50)
+            wallet_balance = self.get_balance()
+
+            if bet_to == 1 and bet_even != 0:
+                claim_res = self.claim(bet_even)
+                if claim_res:
+                    wallet_balance_1 = self.get_balance()
+                    print(f'Win Even ID: {bet_even} Amount:{bet_even_amount} Profit: {round(wallet_balance_1 - wallet_balance, 3)}')
+                    bet_even_win = True
+                else:
+                    print(f'Lose Even ID: {bet_even} Amount:{bet_even_amount}')
+                    bet_even_win = False
+            if bet_to == 2 and bet_odd != 0:
+                claim_res = self.claim(bet_odd)
+                if claim_res:
+                    wallet_balance_1 = self.get_balance()
+                    print(f'Win Odd ID: {bet_odd} Amount:{bet_odd_amount} Profit: {round(wallet_balance_1 - wallet_balance, 3)}')
+                    bet_odd_win = True
+                else:
+                    print(f'Lose Odd ID: {bet_odd} Amount:{bet_odd_amount}')
+                    bet_odd_win = False
 
 
 if __name__ == '__main__':
-    bot = PredictionBotUp()
-    bot.wallet_connect("up")
+    bot = PredictionBotRate()
+    bot.wallet_connect("down")
     bot.start_prediction()
