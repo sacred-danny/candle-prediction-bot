@@ -66,7 +66,9 @@ class PredictionBot:
 
         self.wallet = None
 
-        self.wallet_address = ""
+        self.wallet_address_rate = ""
+        self.wallet_address_down = ""
+        self.wallet_address_up = ""
         self.private_key_rate = ""
         self.private_key_down = ""
         self.private_key_up = ""
@@ -81,6 +83,7 @@ class PredictionBot:
         self.max_bet_amount = 6
 
         self.bnb_price = 0
+        self.bet_logic_type = "rate";
 
         self.current_up_rate = 1
         self.current_down_rate = 1
@@ -107,7 +110,9 @@ class PredictionBot:
             with open('config.json') as f:
                 data = json.load(f)
                 self.provider = data['provider_bsc']
-                self.wallet_address = data['address']
+                self.wallet_address_rate = data['address_rate']
+                self.wallet_address_down = data['address_down']
+                self.wallet_address_up = data['address_up']
                 self.private_key_rate = data['private_key_rate']
                 self.private_key_down = data['private_key_down']
                 self.private_key_up = data['private_key_up']
@@ -123,19 +128,20 @@ class PredictionBot:
             print(e)
             print("Config file read failed...")
 
-    def wallet_connect(self, type):
+    def wallet_connect(self, bet_logic_type):
         self.read_config()
+        self.bet_logic_type = bet_logic_type
         try:
             self.wallet = Token(
                 address=self.usdt,
                 provider=self.provider,
             )
-            if type == "up":
-               self.wallet.connect_wallet(self.wallet_address, self.private_key_up)
-            else if type == "down":
-                self.wallet.connect_wallet(self.wallet_address, self.private_key_down)
-            else if type == "rate":
-                self.wallet.connect_wallet(self.wallet_address, self.private_key_rate)
+            if self.bet_logic_type == "up":
+               self.wallet.connect_wallet(self.wallet_address_up, self.private_key_up)
+            else if self.bet_logic_type == "down":
+                self.wallet.connect_wallet(self.wallet_address_down, self.private_key_down)
+            else:
+                self.wallet.connect_wallet(self.wallet_address_rate, self.private_key_rate)
             if self.wallet.is_connected():
                 print("Wallet Connect!")
             else:
@@ -150,8 +156,15 @@ class PredictionBot:
         return current_price
 
     def get_balance(self):
-        wallet_address = self.wallet.web3.toChecksumAddress(self.wallet_address.lower())
-        wallet_balance = self.wallet.web3.eth.get_balance(wallet_address) / 10 ** 18
+        if self.bet_logic_type == "up":
+           wallet_address = self.wallet.web3.toChecksumAddress(self.wallet_address_up.lower())
+           wallet_balance = self.wallet.web3.eth.get_balance(wallet_address_up) / 10 ** 18
+        else if self.bet_logic_type == "down":
+            wallet_address = self.wallet.web3.toChecksumAddress(self.wallet_address_down.lower())
+            wallet_balance = self.wallet.web3.eth.get_balance(wallet_address_down) / 10 ** 18
+        else:
+            wallet_address = self.wallet.web3.toChecksumAddress(self.wallet_address_rate.lower())
+            wallet_balance = self.wallet.web3.eth.get_balance(wallet_address_rate) / 10 ** 18
         return wallet_balance
 
     def get_price_loop(self):
