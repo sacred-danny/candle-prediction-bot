@@ -46,18 +46,18 @@ logging.config.dictConfig({
 LOGGER = logging.getLogger()
 
 
-class PredictionBot2(PredictionBot):
+class PredictionBotArbitrage(PredictionBot):
     def __init__(self):
         super().__init__()
-        self.diff = 0.5
-        self.read_config_2()
+        self.diff = 0.7
+        self.read_my_config()
 
-    def read_config_2(self):
+    def read_my_config(self):
         try:
             with open('config.json') as f:
                 data = json.load(f)
                 self.diff = data['diff']
-                self.bet_amount = data['bet_amount']
+                self.bet_amount = data['arbitrage_bet_amount']
         except Exception as e:
             print(e)
             print("Config file read failed...")
@@ -163,6 +163,6 @@ class PredictionBot2(PredictionBot):
 
 
 if __name__ == '__main__':
-    bot = PredictionBot2()
-    bot.wallet_connect()
+    bot = PredictionBotArbitrage()
+    bot.wallet_connect("arbitrage")
     bot.start_double()
