@@ -138,7 +138,7 @@ class PredictionBot:
             )
             if self.bet_logic_type == "up":
                self.wallet.connect_wallet(self.wallet_address_up, self.private_key_up)
-            else if self.bet_logic_type == "down":
+            elif self.bet_logic_type == "down":
                 self.wallet.connect_wallet(self.wallet_address_down, self.private_key_down)
             else:
                 self.wallet.connect_wallet(self.wallet_address_rate, self.private_key_rate)
@@ -159,7 +159,7 @@ class PredictionBot:
         if self.bet_logic_type == "up":
            wallet_address = self.wallet.web3.toChecksumAddress(self.wallet_address_up.lower())
            wallet_balance = self.wallet.web3.eth.get_balance(wallet_address_up) / 10 ** 18
-        else if self.bet_logic_type == "down":
+        elif self.bet_logic_type == "down":
             wallet_address = self.wallet.web3.toChecksumAddress(self.wallet_address_down.lower())
             wallet_balance = self.wallet.web3.eth.get_balance(wallet_address_down) / 10 ** 18
         else:
