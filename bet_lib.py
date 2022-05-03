@@ -67,7 +67,9 @@ class PredictionBot:
         self.wallet = None
 
         self.wallet_address = ""
-        self.private_key = ""
+        self.private_key_rate = ""
+        self.private_key_down = ""
+        self.private_key_up = ""
 
         self.provider = ""
 
@@ -106,7 +108,9 @@ class PredictionBot:
                 data = json.load(f)
                 self.provider = data['provider_bsc']
                 self.wallet_address = data['address']
-                self.private_key = data['private_key']
+                self.private_key_rate = data['private_key_rate']
+                self.private_key_down = data['private_key_down']
+                self.private_key_up = data['private_key_up']
                 self.bet_time = data['bet_time']
                 self.pending_time = data['pending_time']
                 self.default_bet_amount = data['bet_amount']
@@ -119,14 +123,19 @@ class PredictionBot:
             print(e)
             print("Config file read failed...")
 
-    def wallet_connect(self):
+    def wallet_connect(self, type):
         self.read_config()
         try:
             self.wallet = Token(
                 address=self.usdt,
                 provider=self.provider,
             )
-            self.wallet.connect_wallet(self.wallet_address, self.private_key)
+            if type == "up":
+               self.wallet.connect_wallet(self.wallet_address, self.private_key_up)
+            else if type == "down":
+                self.wallet.connect_wallet(self.wallet_address, self.private_key_down)
+            else if type == "rate":
+                self.wallet.connect_wallet(self.wallet_address, self.private_key_rate)
             if self.wallet.is_connected():
                 print("Wallet Connect!")
             else:

@@ -5,7 +5,7 @@ import threading
 import time
 from datetime import datetime
 
-from bet_double_2 import PredictionBot
+from bet_lib import PredictionBot
 
 if not os.path.exists('logs-high2'):
     os.mkdir('logs-high2')
@@ -46,7 +46,7 @@ logging.config.dictConfig({
 LOGGER = logging.getLogger()
 
 
-class PredictionBot2(PredictionBot):
+class PredictionBotRate(PredictionBot):
     def __init__(self):
         super().__init__()
         self.diff = 0.5
@@ -91,7 +91,7 @@ class PredictionBot2(PredictionBot):
                           f'Bet: {self.up_or_down} {bet_amount}', end=' ')
                 time.sleep(0.8)
 
-    def start_double(self):
+    def start_prediction(self):
         self.wallet_balance = self.get_balance()
         print('wallet balance:', self.wallet_balance)
 
@@ -202,6 +202,6 @@ class PredictionBot2(PredictionBot):
 
 
 if __name__ == '__main__':
-    bot = PredictionBot2()
-    bot.wallet_connect()
-    bot.start_double()
+    bot = PredictionBotRate()
+    bot.wallet_connect("rate")
+    bot.start_prediction()
