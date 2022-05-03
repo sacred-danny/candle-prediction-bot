@@ -91,7 +91,7 @@ class PredictionBotArbitrage(PredictionBot):
                           f'Bet: {self.up_or_down} {bet_amount}', end=' ')
                 time.sleep(0.8)
 
-    def start_double(self):
+    def start_prediction(self):
         self.wallet_balance = self.get_balance()
         print('wallet balance:', self.wallet_balance)
 
@@ -138,10 +138,10 @@ class PredictionBotArbitrage(PredictionBot):
 
             # diff1 = self.current_price - self.locked_price
             print('\nBet')
-            diff2 = self.bnb_price - self.current_price
+            arbitrage = self.bnb_price - self.current_price
 
-            if abs(diff2) > self.diff:
-                if diff2 > 0:
+            if abs(arbitrage) > self.diff:
+                if arbitrage > 0:
                     bet_res = self.bet_bull()
                     self.up_or_down = "Up"
                 else:
@@ -165,4 +165,4 @@ class PredictionBotArbitrage(PredictionBot):
 if __name__ == '__main__':
     bot = PredictionBotArbitrage()
     bot.wallet_connect("arbitrage")
-    bot.start_double()
+    bot.start_prediction()
