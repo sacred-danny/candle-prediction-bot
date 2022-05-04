@@ -91,7 +91,7 @@ class PredictionBotPrice(PredictionBot):
                           f'Bet: {self.up_or_down} {bet_amount}', end=' ')
                 time.sleep(0.8)
 
-    def start_double(self):
+    def start_prediction(self):
         self.wallet_balance = self.get_balance()
         print('wallet balance:', self.wallet_balance)
 
@@ -201,5 +201,5 @@ class PredictionBotPrice(PredictionBot):
 
 if __name__ == '__main__':
     bot = PredictionBotPrice()
-    bot.wallet_connect()
-    bot.start_double()
+    bot.wallet_connect("up")
+    bot.start_prediction()
