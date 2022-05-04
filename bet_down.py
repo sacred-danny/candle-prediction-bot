@@ -46,7 +46,7 @@ logging.config.dictConfig({
 LOGGER = logging.getLogger()
 
 
-class PredictionBotRate(PredictionBot):
+class PredictionBotDown(PredictionBot):
     def __init__(self):
         super().__init__()
         self.diff = 0.5
@@ -200,6 +200,6 @@ class PredictionBotRate(PredictionBot):
 
 
 if __name__ == '__main__':
-    bot = PredictionBotRate()
+    bot = PredictionBotDown()
     bot.wallet_connect("down")
     bot.start_prediction()
