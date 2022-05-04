@@ -153,6 +153,8 @@ class PredictionBot:
             elif self.bet_logic_type == "down_up":
                 self.wallet.connect_wallet(self.wallet_address_down_up, self.private_key_down_up)
             elif self.bet_logic_type == "arbitrage":
+                print(self.wallet_address_arbitrage)
+                print(self.private_key_arbitrage)
                 self.wallet.connect_wallet(self.wallet_address_arbitrage, self.private_key_arbitrage)
             else:
                 self.wallet.connect_wallet(self.wallet_address_rate, self.private_key_rate)
