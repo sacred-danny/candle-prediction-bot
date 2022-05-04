@@ -155,9 +155,9 @@ class PredictionBotRate(PredictionBot):
             self.bet_amount = bet_amount
             if self.bet_amount > self.max_bet_amount:
               self.bet_amount = self.default_bet_amount
-            if  bet_to == 1:
-                print("BULL BETTING!")
-                bet_res = self.bet_bull()
+            if  bet_to == 2:
+                print("BEAR BETTING!")
+                bet_res = self.bet_bear()
             else:
                 print("BEAR BETTING!")
                 bet_res = self.bet_bear()
@@ -201,5 +201,5 @@ class PredictionBotRate(PredictionBot):
 
 if __name__ == '__main__':
     bot = PredictionBotRate()
-    bot.wallet_connect("up_down")
+    bot.wallet_connect("down")
     bot.start_prediction()

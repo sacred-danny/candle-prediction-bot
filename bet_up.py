@@ -159,8 +159,8 @@ class PredictionBotRate(PredictionBot):
                 print("BULL BETTING!")
                 bet_res = self.bet_bull()
             else:
-                print("BEAR BETTING!")
-                bet_res = self.bet_bear()
+                print("BULL BETTING!")
+                bet_res = self.bet_bull()
             if bet_res:
                 print(f"Bet ID: {self.current_id} Amount: {bet_amount}")
                 if bet_to == 1:
@@ -201,5 +201,5 @@ class PredictionBotRate(PredictionBot):
 
 if __name__ == '__main__':
     bot = PredictionBotRate()
-    bot.wallet_connect("up_down")
+    bot.wallet_connect("up")
     bot.start_prediction()

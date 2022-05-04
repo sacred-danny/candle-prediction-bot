@@ -201,5 +201,5 @@ class PredictionBotRate(PredictionBot):
 
 if __name__ == '__main__':
     bot = PredictionBotRate()
-    bot.wallet_connect("down")
+    bot.wallet_connect("down_up")
     bot.start_prediction()

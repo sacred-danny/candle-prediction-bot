@@ -69,9 +69,13 @@ class PredictionBot:
         self.wallet_address_rate = ""
         self.wallet_address_down = ""
         self.wallet_address_up = ""
+        self.wallet_address_up_down = ""
+        self.wallet_address_down_up = ""
         self.private_key_rate = ""
         self.private_key_down = ""
         self.private_key_up = ""
+        self.private_key_up_down = ""
+        self.private_key_down_up = ""
 
         self.provider = ""
 
@@ -113,9 +117,13 @@ class PredictionBot:
                 self.wallet_address_rate = data['address_rate']
                 self.wallet_address_down = data['address_down']
                 self.wallet_address_up = data['address_up']
+                self.wallet_address_up_down = data['address_up_down']
+                self.wallet_address_down_up = data['address_down_up']
                 self.private_key_rate = data['private_key_rate']
                 self.private_key_down = data['private_key_down']
                 self.private_key_up = data['private_key_up']
+                self.private_key_up_down = data['private_key_up_down']
+                self.private_key_down_up = data['private_key_down_up']
                 self.bet_time = data['bet_time']
                 self.pending_time = data['pending_time']
                 self.default_bet_amount = data['bet_amount']
@@ -140,6 +148,10 @@ class PredictionBot:
                self.wallet.connect_wallet(self.wallet_address_up, self.private_key_up)
             elif self.bet_logic_type == "down":
                 self.wallet.connect_wallet(self.wallet_address_down, self.private_key_down)
+            elif self.bet_logic_type == "up_down":
+                self.wallet.connect_wallet(self.wallet_address_up_down, self.private_key_up_down)
+            elif self.bet_logic_type == "down_up":
+                self.wallet.connect_wallet(self.wallet_address_down_up, self.private_key_down_up)
             elif self.bet_logic_type == "arbitrage":
                 self.wallet.connect_wallet(self.wallet_address_down, self.private_key_arbitrage)
             else:
@@ -159,9 +171,13 @@ class PredictionBot:
 
     def get_balance(self):
         if self.bet_logic_type == "up":
-           wallet_address = self.wallet.web3.toChecksumAddress(self.wallet_address_up.lower())
+            wallet_address = self.wallet.web3.toChecksumAddress(self.wallet_address_up.lower())
+        if self.bet_logic_type == "up_down":
+            wallet_address = self.wallet.web3.toChecksumAddress(self.wallet_address_up_down.lower())
         elif self.bet_logic_type == "down":
             wallet_address = self.wallet.web3.toChecksumAddress(self.wallet_address_down.lower())
+        elif self.bet_logic_type == "down_up":
+            wallet_address = self.wallet.web3.toChecksumAddress(self.wallet_address_down_up.lower())
         elif self.bet_logic_type == "arbitrage":
             wallet_address = self.wallet.web3.toChecksumAddress(self.wallet_address_arbitrage.lower())
         else:
