@@ -157,6 +157,8 @@ class PredictionBot:
             else:
                 self.wallet.connect_wallet(self.wallet_address_rate, self.private_key_rate)
             if self.wallet.is_connected():
+                print(self.wallet_address_up)
+                print(self.private_key_up)
                 print("Wallet Connect!")
             else:
                 exit()
