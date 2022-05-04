@@ -170,7 +170,6 @@ class PredictionBot:
         return current_price
 
     def get_balance(self):
-        print(self.bet_logic_type)
         if self.bet_logic_type == "rate":
             wallet_address = self.wallet.web3.toChecksumAddress(self.wallet_address_rate.lower())
         if self.bet_logic_type == "up_down":
@@ -183,7 +182,6 @@ class PredictionBot:
             wallet_address = self.wallet.web3.toChecksumAddress(self.wallet_address_arbitrage.lower())
         else:
             wallet_address = self.wallet.web3.toChecksumAddress(self.wallet_address_up.lower())
-        print(wallet_address)
         wallet_balance = self.wallet.web3.eth.get_balance(wallet_address) / 10 ** 18
         return wallet_balance
 
