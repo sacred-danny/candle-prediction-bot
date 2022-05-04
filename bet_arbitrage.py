@@ -5,7 +5,7 @@ import threading
 import time
 from datetime import datetime
 
-from bet_double_2 import PredictionBot
+from bet_lib import PredictionBot
 
 if not os.path.exists('logs-high2'):
     os.mkdir('logs-high2')
