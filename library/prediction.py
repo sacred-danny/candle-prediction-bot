@@ -30,7 +30,7 @@ class Token:
             address=Web3.toChecksumAddress('0x10ed43c718714eb63d5aa57b78b54704e256024e'),
             abi=json.load(open("library/abi_files_bnb/" + "router.abi")))
         self.prediction_router = self.web3.eth.contract(
-            address=Web3.toChecksumAddress('0x18B2A687610328590Bc8F2e5fEdDe3b582A49cdA'),
+            address=Web3.toChecksumAddress('0xF9120F473a3B3Ef24855Cd172cf741726E36eBF0'),
             abi=json.load(open("library/abi_files_bnb/" + "prediction.abi")))
         self.oracle_router = self.web3.eth.contract(
             address=Web3.toChecksumAddress('0xD276fCF34D54A926773c399eBAa772C12ec394aC'),
@@ -111,7 +111,7 @@ class Token:
 
     @require_connected
     def get_round(self, id=0):
-        round = self.prediction_router.functions.rounds(id).call()
+        round = self.prediction_router.functions.Rounds(id).call()
         if int(round[8]) == 0:
             self.i = 0
             self.j = self.j+1
@@ -124,17 +124,17 @@ class Token:
         return self.prediction_router.functions.currentEpoch().call()
 
     def bet_bull(self, amount=0, id=0):
-        func = self.prediction_router.functions.betBull(id)
+        func = self.prediction_router.functions.BetBull(id)
         params = self.create_transaction_params(value=amount)
         return self.send_transaction(func, params)
 
     def bet_bear(self, amount=0, id=0):
-        func = self.prediction_router.functions.betBear(id)
+        func = self.prediction_router.functions.BetBear(id)
         params = self.create_transaction_params(value=amount)
         return self.send_transaction(func, params)
 
     def claim(self, id=0):
-        func = self.prediction_router.functions.claim([id])
+        func = self.prediction_router.functions.Claim([id])
         params = self.create_transaction_params()
         return self.send_transaction(func, params)
 

@@ -68,8 +68,8 @@ class PredictionBotUp(PredictionBot):
             if self.current_id > 0:
                 current_id = self.wallet.get_current_Epoch()
                 previous_round = self.wallet.get_round(current_id - 1)
-                self.locked_price = previous_round[4] / 10 ** 8
-                self.current_round_end = previous_round[3]
+                self.locked_price = previous_round[5] / 10 ** 8
+                self.current_round_end = previous_round[9]
                 if price != self.current_price:
                     price = self.current_price
                     print('\n', end=' ')
@@ -117,8 +117,8 @@ class PredictionBotUp(PredictionBot):
         while True:
             self.current_id = self.wallet.get_current_Epoch()
             previous_round = self.wallet.get_round(self.current_id - 1)
-            self.locked_price = previous_round[4] / 10 ** 8
-            self.current_round_end = previous_round[3]
+            self.locked_price = previous_round[5] / 10 ** 8
+            self.current_round_end = previous_round[9]
 
             time.sleep(10)
 
@@ -129,9 +129,9 @@ class PredictionBotUp(PredictionBot):
                     time.sleep(0.1)
 
             current_round = self.wallet.get_round(self.current_id)
-            self.current_prize = current_round[8]
-            self.current_up_amount = current_round[9]
-            self.current_down_amount = current_round[10]
+            self.current_prize = current_round[1] + current_round[2];
+            self.current_up_amount = current_round[1]
+            self.current_down_amount = current_round[2]
             bet_count += 1
             if bet_count % 2 == 1:
                 bet_to = 1

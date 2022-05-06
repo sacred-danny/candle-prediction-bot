@@ -96,10 +96,10 @@ class PredictionBot:
 
         self.remain_time = 300
 
-        self.contract_address = "0x18b2a687610328590bc8f2e5fedde3b582a49cda"
+        self.contract_address = "0xF9120F473a3B3Ef24855Cd172cf741726E36eBF0"
         self.usdt = "0x55d398326f99059ff775485246999027b3197955"
-        self.bull_method = "0x57fb096f"
-        self.bear_method = "0xaa6b873a"
+        self.bull_method = "0xbb434f28"
+        self.bear_method = "0xbd776d8a"
         self.wallet_balance_limit_down = 0
         self.wallet_balance_limit_up = 100
 
@@ -268,7 +268,7 @@ class PredictionBot:
 
     def get_bnb_price(self):
         try:
-            res = requests.get('https://api.binance.com/api/v3/ticker/price?symbol=BNBBUSD')
+            res = requests.get('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT')
             res_json = res.json()
             self.bnb_price = round(float(res_json['price']), 3)
         except Exception as e:
@@ -292,8 +292,8 @@ class PredictionBot:
         while True:
             self.current_id = self.wallet.get_current_Epoch()
             previous_round = self.wallet.get_round(self.current_id - 1)
-            self.locked_price = previous_round[4] / 10 ** 8
-            self.current_round_end = previous_round[3]
+            self.locked_price = previous_round[5] / 10 ** 8
+            self.current_round_end = previous_round[9]
             round_count += 1
             time.sleep(5)
             price = self.current_price
@@ -323,8 +323,8 @@ class PredictionBot:
 
                 current_round = self.wallet.get_round(self.current_id)
                 self.current_prize = current_round[8]
-                self.current_up_amount = current_round[9] + self.current_up_amount_p
-                self.current_down_amount = current_round[10] + self.current_down_amount_p
+                self.current_up_amount = current_round[1] + self.current_up_amount_p
+                self.current_down_amount = current_round[2] + self.current_down_amount_p
 
                 self.start_mempool = False
                 prize = self.current_up_amount + self.current_down_amount

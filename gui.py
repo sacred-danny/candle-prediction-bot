@@ -134,7 +134,7 @@ class PredictionBot(QObject):
         self.bet_remain_c.setText(QCoreApplication.translate("bet_bot", u"Time: ", None))
         self.locked_price_c.setText(QCoreApplication.translate("bet_bot", u"Locked: ", None))
         self.current_price_c.setText(QCoreApplication.translate("bet_bot", u"Current: ", None))
-        self.bnb_price_c.setText(QCoreApplication.translate("bet_bot", u"BNBBUSD: ", None))
+        self.bnb_price_c.setText(QCoreApplication.translate("bet_bot", u"BNBUSDT: ", None))
         self.rate_up_c.setText(QCoreApplication.translate("bet_bot", u"Up: ", None))
         self.rate_down_c.setText(QCoreApplication.translate("bet_bot", u"Down: ", None))
         self.bet_id_c.setText(QCoreApplication.translate("bet_bot", u"ID: ", None))
@@ -189,7 +189,7 @@ class PredictionBot(QObject):
 
     def get_bnb_price(self):
         try:
-            res = requests.get('https://api.binance.com/api/v3/ticker/price?symbol=BNBBUSD')
+            res = requests.get('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT')
             res_json = res.json()
             self.bnb_price = round(float(res_json['price']), 3)
         except Exception as e:
@@ -247,7 +247,7 @@ class PredictionBot(QObject):
     def get_bnb_price_loop(self):
         while True:
             self.get_bnb_price()
-            self.bnb_price_c.setText(f"BNBBUSD: {round(self.bnb_price, 2)}|{round(self.bnb_price - self.current_price, 2)}|{round(self.bnb_price - self.locked_price, 2)}")
+            self.bnb_price_c.setText(f"BNBUSDT: {round(self.bnb_price, 2)}|{round(self.bnb_price - self.current_price, 2)}|{round(self.bnb_price - self.locked_price, 2)}")
             time.sleep(0.5)
 
     def get_remain_time_loop(self):
